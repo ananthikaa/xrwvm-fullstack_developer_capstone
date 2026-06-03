@@ -18,6 +18,11 @@ const Reviews = require('./review');
 
 const Dealerships = require('./dealership');
 
+const Inventory = require('./inventory');
+
+const cars_data =
+JSON.parse(fs.readFileSync("data/car_records.json", 'utf8'));
+
 try {
   Reviews.deleteMany({}).then(()=>{
     Reviews.insertMany(reviews_data['reviews']);
@@ -25,6 +30,9 @@ try {
   Dealerships.deleteMany({}).then(()=>{
     Dealerships.insertMany(dealerships_data['dealerships']);
   });
+  Inventory.deleteMany({}).then(()=>{
+    Inventory.insertMany(cars_data['cars']);
+});
   
 } catch (error) {
   res.status(500).json({ error: 'Error fetching documents' });
@@ -89,6 +97,15 @@ app.get('/fetchDealer/:id', async (req, res) => {
       res.status(500).json({ error: 'Error fetching documents' });
     }
   });
+
+  app.get('/fetchCarMakes', async (req, res) => {
+  try {
+    const documents = await Inventory.find();
+    res.json(documents);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching documents' });
+  }
+});
 
 //Express route to insert review
 app.post('/insert_review', express.raw({ type: '*/*' }), async (req, res) => {

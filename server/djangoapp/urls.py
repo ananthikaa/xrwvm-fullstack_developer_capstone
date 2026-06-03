@@ -2,6 +2,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from . import views
+from django.views.generic import TemplateView
 
 app_name = 'djangoapp'
 
@@ -22,4 +23,8 @@ urlpatterns = [
          name='dealer_reviews'),
 
     path('add_review/', views.add_review, name='add_review'),
+    path('dealers/', TemplateView.as_view(template_name="index.html")),
+path('dealer/<int:id>/', TemplateView.as_view(template_name="index.html")),
+path('postreview/<int:dealer_id>',
+     TemplateView.as_view(template_name="index.html")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
